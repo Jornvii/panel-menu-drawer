@@ -4,8 +4,15 @@ import 'rotated_text_icon.dart';
 
 class RightDrawer extends StatelessWidget {
   final AnimationController animationController;
+  final void Function(String) onMenuItemTap;
+  final String activeScreen;
 
-  const RightDrawer({super.key, required this.animationController});
+  const RightDrawer({
+    super.key,
+    required this.animationController,
+    required this.onMenuItemTap,
+    required this.activeScreen,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class RightDrawer extends StatelessWidget {
         ).animate(animationController),
         child: Container(
           width: 100,
-          height: 600, 
+          height: 600,
           decoration: const BoxDecoration(
             color: Color.fromARGB(255, 24, 60, 122),
             borderRadius: BorderRadius.only(
@@ -27,26 +34,35 @@ class RightDrawer extends StatelessWidget {
             ),
           ),
           child: ScrollConfiguration(
-            behavior: const ScrollBehavior().copyWith(overscroll: false), 
+            behavior: const ScrollBehavior().copyWith(overscroll: false),
             child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 20), 
-              children: const [
-                RotatedTextIcon(iconData: Icons.telegram, label: "Telegram"),
-                RotatedTextIcon(iconData: Icons.facebook, label: "Facebook"),
-                RotatedTextIcon(iconData: Icons.messenger, label: "Messenger"),
-                RotatedTextIcon(iconData: Icons.email, label: "Email"),
-                RotatedTextIcon(iconData: Icons.class_, label: "Classroom"),
-                RotatedTextIcon(iconData: Icons.home, label: "Home"),
-                RotatedTextIcon(iconData: Icons.settings, label: "Settings"),
-                RotatedTextIcon(iconData: Icons.notifications, label: "Notifications"),
-                RotatedTextIcon(iconData: Icons.person, label: "Profile"),
-                RotatedTextIcon(iconData: Icons.help, label: "Help"),
-                RotatedTextIcon(iconData: Icons.logout, label: "Logout"),
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              children: [
+                _buildMenuItem(Icons.telegram, "Telegram"),
+                _buildMenuItem(Icons.facebook, "Facebook"),
+                _buildMenuItem(Icons.messenger, "Messenger"),
+                _buildMenuItem(Icons.email, "Email"),
+                _buildMenuItem(Icons.class_, "Classroom"),
+                _buildMenuItem(Icons.home, "Home"),
+                _buildMenuItem(Icons.settings, "Settings"),
+                _buildMenuItem(Icons.notifications, "Notifications"),
+                _buildMenuItem(Icons.person, "Profile"),
+                _buildMenuItem(Icons.help, "Help"),
+                _buildMenuItem(Icons.logout, "Logout"),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMenuItem(IconData iconData, String label) {
+    return RotatedTextIcon(
+      iconData: iconData,
+      label: label,
+      isActive: label == activeScreen, // Pass active state
+      onTap: () => onMenuItemTap(label),
     );
   }
 }
